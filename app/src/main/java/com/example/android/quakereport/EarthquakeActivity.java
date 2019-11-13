@@ -15,11 +15,16 @@
  */
 package com.example.android.quakereport;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity {
@@ -39,10 +44,23 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         // Create a new {@link ArrayAdapter} of earthquakes
 
-        EarthquakeAdapter adapter = new EarthquakeAdapter(this,earthquakes);
+        final EarthquakeAdapter adapter = new EarthquakeAdapter(this,earthquakes);
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         earthquakeListView.setAdapter(adapter);
-        //this is a comment2
+
+        //handle the click on each item
+        earthquakeListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Earthquake currentEarthquake = adapter.getItem(i);
+                        Uri EarthquakeUri = Uri.parse(currentEarthquake.getmUrl());
+
+                        Intent websiteIntent = new Intent(Intent.ACTION_VIEW,EarthquakeUri);
+                        startActivity(websiteIntent);
+                    }
+                }
+        );
     }
 }
